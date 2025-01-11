@@ -1,4 +1,5 @@
 #include "project.h"
+#include <stdint.h>
 
 float findmin(float* vals, uint32_t n){
 	float min = vals[0];
@@ -32,35 +33,54 @@ float getdeterminant(Vec2 edgestart, Vec2 edgeend, Vec2 pixel){
 		return edgelen.x * pixeldist.y - edgelen.y * pixeldist.x;
 }
 
-void clearscreen(Pixel* screen, uint32_t width, uint32_t height, Color color){
-	for(uint32_t i = 0; i < width * height; i++){
-		screen[i].color = color;
+Screen* createscreen(uint32_t width, uint32_t height){
+	Screen* screen = malloc(sizeof(*screen));
+	screen->width = width;
+	screen->height = height;
+	screen->pixels = malloc(sizeof(Pixel) * width * height);
+	return screen;
+}
+
+void clearscreen(Screen* screen, Color color){
+	for(uint32_t i = 0; i < screen->width * screen->height; i++){
+		screen->pixels[i].color = color;
 	}
 }
 
-void fillpixel(Pixel* screen, uint32_t width, uint32_t height, uint32_t x, uint32_t y, Color color){
-	if(y>=height || x>=width) return;
-	screen[(y * width) + x].color = color;
+void fillpixel(Screen* screen, uint32_t x, uint32_t y, Color color){
+	if(y>=screen->height || x>=screen->width) return;
+	screen->pixels[(y * screen->width) + x].color = color;
 }
 
-void renderscreen(Pixel* screen, uint32_t width, uint32_t height){
-	for(uint32_t i = 0; i < height * width; i++){
-		Pixel pixel = screen[i];
-		if(i % width == 0)
+void renderscreen(Screen* screen){
+	for(uint32_t i = 0; i < screen->height * screen->width; i++){
+		Pixel pixels = screen->pixels[i];
+		if(i % screen->width == 0)
 			printf("\n");
-		printf("\033[38;2;%u;%u;%umo" RESET, pixel.color.r,pixel.color.g,pixel.color.b);
+		printf("\033[38;2;%u;%u;%umo" RESET, pixels.color.r,pixels.color.g,pixels.color.b);
 	}
 }
 
-void drawrectangle(Pixel* screen, uint32_t width, uint32_t height, Vec2 pos, Vec2 size, Color color){
-	for(uint32_t y = pos.y; y < size.y; y++){
-		for(uint32_t x = pos.x; x < size.x; x++){
-			fillpixel(screen, width, height, x, y, color);
+void drawrectangle(Screen* screen, Vec2 pos, Vec2 size, Color color){
+
+	float xvals[] = {pos.x, size.x};
+	float yvals[] = {pos.y, size.y};
+
+	float xmin = findmin(xvals, 2);
+	float ymin = findmin(yvals, 2);
+
+	float xmax = findmax(xvals, 2);
+	float ymax = findmax(yvals, 2);
+
+	for(int32_t y = ymin; y <= ymax; y++){
+		for(int32_t x = xmin; x <= xmax; x++){
+			fillpixel(screen, x, y, color);
 		}
 	}
+
 }
 
-void drawtriangle(Pixel* screen, uint32_t width, uint32_t height, Vec2 vert1, Vec2 vert2, Vec2 vert3, Color color){
+void drawtriangle(Screen* screen, Vec2 vert1, Vec2 vert2, Vec2 vert3, Color color){
 	float xvals[] = {vert1.x, vert2.x, vert3.x};
 	float yvals[] = {vert1.y, vert2.y, vert3.y};
 	
@@ -79,7 +99,7 @@ void drawtriangle(Pixel* screen, uint32_t width, uint32_t height, Vec2 vert1, Ve
 			float d3 = getdeterminant(vert1, vert2, point);
 
 			if(d1 >= 0 && d2 >= 0 && d3 >= 0){
-				fillpixel(screen, width, height, x, y, color);
+				fillpixel(screen, x, y, color);
 			}
 		}
 	}

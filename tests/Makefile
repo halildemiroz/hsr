@@ -1,7 +1,7 @@
 # Makefile to compile all .c files into /bin folder
 
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -g -std=c2x
 SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c, bin/%.o, $(SRCS))
 TARGETS = $(patsubst %.c, bin/%, $(SRCS))

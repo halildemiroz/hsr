@@ -21,15 +21,21 @@ typedef struct{
 }Pixel;
 
 typedef struct{
+	Pixel* pixels;
+	uint32_t width;
+	uint32_t height;
+}Screen;
+
+typedef struct{
 	float x,y;
 }Vec2;
 
-void clearscreen(Pixel* screen, uint32_t width, uint32_t height, Color color);
+void clearscreen(Screen* screen, Color color);
 
-void fillpixel(Pixel* screen, uint32_t width, uint32_t height, uint32_t x, uint32_t y, Color color);
+void fillpixel(Screen* screen, uint32_t x, uint32_t y, Color color);
 
-void renderscreen(Pixel* screen, uint32_t width, uint32_t height);
+void renderscreen(Screen* screen);
 
-void drawrectangle(Pixel* screen, uint32_t width, uint32_t height, Vec2 pos, Vec2 size, Color color);
+void drawrectangle(Screen* screen, Vec2 pos, Vec2 size, Color color);
 
-void drawtriangle(Pixel* screen, uint32_t width, uint32_t height, Vec2 a, Vec2 b, Vec2 c, Color color);
+void drawtriangle(Screen* screen, Vec2 a, Vec2 b, Vec2 c, Color color);
