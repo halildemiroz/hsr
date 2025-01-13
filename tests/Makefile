@@ -12,11 +12,11 @@ all: setup $(TARGETS)
 
 # Rule to build each target
 bin/%: bin/%.o
-	$(CC) $(CFLAGS) -o $@ $^ -lxcb
+	$(CC) $(CFLAGS) -o $@ $^ -lxcb -lm
 
 # Rule to compile each source file to an object file
 bin/%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -lxcb
+	$(CC) $(CFLAGS) -c $< -o $@ -lxcb -lm
 
 # Create the /bin directory if it doesn't exist
 setup:

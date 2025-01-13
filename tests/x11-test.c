@@ -67,11 +67,14 @@ int main() {
     clearscreen(pixels, BLACK);
 
     // DRAWING IS HEREEEEEE ------------------------------
-
+    
+    /*
     drawrectangle(pixels, (Vec2){70,70}, (Vec2){100,100}, GREEN);
     drawtriangle(pixels, (Vec2){100,100}, (Vec2){250,100}, (Vec2){250,250}, BLUE);
     drawtriangle(pixels, (Vec2){250,250}, (Vec2){100,250}, (Vec2){100,100}, RED);
-
+    */
+    
+    drawcircle(pixels, (Vec2){100,100}, 100, LILA);
     // ---------------------------------------------------
 
     xcb_generic_event_t* event;

@@ -3,13 +3,15 @@
 
 int main() {
 
-	Screen* screen = createscreen(10,10);
+	Screen* screen = createscreen(20,20);
 
-	clearscreen(screen, BLUE);
+	clearscreen(screen, RED);
 
-	drawrectangle(screen, (Vec2){0,0}, (Vec2){5,5}, RED);
+	//drawrectangle(screen, (Vec2){5,5}, (Vec2){10,10}, RED);
 
-	fillpixel(screen,3,3,WHITE);
+	//fillpixel(screen,3,3,WHITE);
+	
+	drawcircle(screen, (Vec2){3,3}, 5, BLUE);
 
 	renderscreen(screen);
 

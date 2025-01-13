@@ -1,5 +1,8 @@
 #include "project.h"
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 float findmin(float* vals, uint32_t n){
 	float min = vals[0];
@@ -57,14 +60,14 @@ void renderscreen(Screen* screen){
 		Pixel pixels = screen->pixels[i];
 		if(i % screen->width == 0)
 			printf("\n");
-		printf("\033[38;2;%u;%u;%umo" RESET, pixels.color.r,pixels.color.g,pixels.color.b);
+		printf("\033[38;2;%u;%u;%umoo" RESET, pixels.color.r,pixels.color.g,pixels.color.b);
 	}
 }
 
-void drawrectangle(Screen* screen, Vec2 pos, Vec2 size, Color color){
+void drawrectangle(Screen* screen, Vec2 startpos, Vec2 endpos, Color color){
 
-	float xvals[] = {pos.x, size.x};
-	float yvals[] = {pos.y, size.y};
+	float xvals[] = {startpos.x, endpos.x};
+	float yvals[] = {startpos.y, endpos.y};
 
 	float xmin = findmin(xvals, 2);
 	float ymin = findmin(yvals, 2);
@@ -77,7 +80,6 @@ void drawrectangle(Screen* screen, Vec2 pos, Vec2 size, Color color){
 			fillpixel(screen, x, y, color);
 		}
 	}
-
 }
 
 void drawtriangle(Screen* screen, Vec2 vert1, Vec2 vert2, Vec2 vert3, Color color){
@@ -101,6 +103,21 @@ void drawtriangle(Screen* screen, Vec2 vert1, Vec2 vert2, Vec2 vert3, Color colo
 			if(d1 >= 0 && d2 >= 0 && d3 >= 0){
 				fillpixel(screen, x, y, color);
 			}
+		}
+	}
+}
+
+void drawcircle(Screen* screen, Vec2 startpos, uint32_t r, Color color){
+	// x2 + y2 = r2
+	// merkeze olan uzaklığı hesapla ve yarıçaptan fazlaysa o noktayı alma
+	uint32_t d;
+	// Center[0] = centerX Center[1] = centerY
+	uint32_t center[] = {startpos.x + r, startpos.y + r};
+	for(uint32_t y = startpos.y; y <= center[1] + r; y++){
+		for(uint32_t x = startpos.x; x <= center[0] + r; x++){
+			d = sqrt(((center[0] - x)*(center[0] - x)) + ((center[1] - y))*(center[1] - y));
+			if(d <= r)
+				fillpixel(screen, x, y, color);
 		}
 	}
 }

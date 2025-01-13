@@ -9,6 +9,7 @@
 #define RED (Color){255,0,0}
 #define GREEN (Color){0,255,0}
 #define BLUE (Color){0,0,255}
+#define LILA (Color){204,153,255}
 
 #define RESET "\033[38m"
 
@@ -36,6 +37,8 @@ void fillpixel(Screen* screen, uint32_t x, uint32_t y, Color color);
 
 void renderscreen(Screen* screen);
 
-void drawrectangle(Screen* screen, Vec2 pos, Vec2 size, Color color);
+void drawrectangle(Screen* screen, Vec2 startpos, Vec2 endpos, Color color);
 
 void drawtriangle(Screen* screen, Vec2 a, Vec2 b, Vec2 c, Color color);
+
+void drawcircle(Screen* screen, Vec2 startpos,uint32_t r, Color color);
