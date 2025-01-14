@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <xcb/xproto.h>
 
-#include "../project.h"
-#include "../project.c"
+#include "../hsr.h"
+#include "../hsr.c"
 
 uint32_t rgbtohex(Color color){
     return ((color.r & 0xff) << 16) + ((color.g & 0xff) << 8) + (color.b & 0xff);

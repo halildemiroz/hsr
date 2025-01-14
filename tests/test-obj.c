@@ -1,5 +1,5 @@
-#include "../project.h"
-#include "../project.c"
+#include "../hsr.h"
+#include "../hsr.c"
 
 int main() {
 
