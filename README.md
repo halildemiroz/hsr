@@ -4,7 +4,7 @@
 This is a project to understand software rendering.
 
 ## Building
-After cloning the repositoriy
+After cloning the repository
 1. `cd tests/`
 2. `make`
 3. `./bin/x11-test` or `./bin/test-obj`
