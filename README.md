@@ -9,7 +9,7 @@ After cloning the repositoriy
 2. `make`
 3. `./bin/x11-test` or `./bin/test-obj`
 
-## Dependincies
+## Dependencies
 1. Gnu Make
 2. Mingw32 or MSYS2
 
