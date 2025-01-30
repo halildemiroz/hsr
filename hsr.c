@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+uint32_t rgbtohex(Color color){
+    return ((color.r & 0xff) << 16) + ((color.g & 0xff) << 8) + (color.b & 0xff);
+}
+
 float findmin(float* vals, uint32_t n){
 	float min = vals[0];
 	for(uint32_t i = 0; i < n; i++){
@@ -34,6 +38,16 @@ float getdeterminant(Vec2 edgestart, Vec2 edgeend, Vec2 pixel){
 		Vec2 pixeldist = vec2sub(pixel, edgestart);
 
 		return edgelen.x * pixeldist.y - edgelen.y * pixeldist.x;
+}
+
+Color interpolate(Color c1, Color c2, float t){
+	Color result;
+	
+	result.r = c1.r * (1-t) + c2.r * t;
+	result.g = c1.g * (1-t) + c2.g * t;
+	result.b = c1.b * (1-t) + c2.b * t;
+
+	return result;
 }
 
 Screen* createscreen(uint32_t width, uint32_t height){

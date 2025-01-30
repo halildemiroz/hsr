@@ -1,4 +1,4 @@
-# Makefile to compile all .c files into /bin folder
+# Makefil to compile all .c files into /bin folder
 
 CC = gcc
 CFLAGS = -Wall -Wextra -g -std=c2x

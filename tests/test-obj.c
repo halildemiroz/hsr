@@ -11,7 +11,7 @@ int main() {
 
 	//fillpixel(screen,3,3,WHITE);
 	
-	drawcircle(screen, (Vec2){3,3}, 5, BLUE);
+	drawcircle(screen, (Vec2){3,3}, 5, interpolate(RED, BLUE, 0.3));
 
 	renderscreen(screen);
 

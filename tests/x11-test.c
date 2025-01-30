@@ -8,10 +8,6 @@
 #include "../hsr.h"
 #include "../hsr.c"
 
-uint32_t rgbtohex(Color color){
-    return ((color.r & 0xff) << 16) + ((color.g & 0xff) << 8) + (color.b & 0xff);
-}
-
 int main() {
 
     Screen* pixels = createscreen(500, 500);
@@ -74,15 +70,15 @@ int main() {
     drawtriangle(pixels, (Vec2){250,250}, (Vec2){100,250}, (Vec2){100,100}, RED);
     */
     
-    drawcircle(pixels, (Vec2){100,100}, 100, LILA);
-    // ---------------------------------------------------
+    drawtriangle(pixels, (Vec2){0,100}, (Vec2){100,0}, (Vec2){100,100}, interpolate(RED, BLUE, 0.5));
 
+    // ------------------------------
     xcb_generic_event_t* event;
     while((event = xcb_wait_for_event(conn))){
         switch (event->response_type & ~0x80) {
             case XCB_EXPOSE:{
                 xcb_expose_event_t* expose = (xcb_expose_event_t*)event;
-                printf("expose: %i, %i\n", expose->width, expose->height);
+                printf("Width: %i, Height: %i\n", expose->width, expose->height);
 
                 int32_t x = 0, y = 0;
                 for(uint32_t i = 0; i < pixels->width * pixels->height; i++){

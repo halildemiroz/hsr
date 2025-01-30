@@ -31,6 +31,10 @@ typedef struct{
 	float x,y;
 }Vec2;
 
+uint32_t rgbtohex(Color color);
+
+Color interpolate(Color c1, Color c2, float t);
+
 void clearscreen(Screen* screen, Color color);
 
 void fillpixel(Screen* screen, uint32_t x, uint32_t y, Color color);
