@@ -35,14 +35,11 @@ typedef struct{
 	float x,y,z;
 }Vec3;
 
-typedef struct {
-    Vec2 a, b, c;
-    Color colorA, colorB, colorC;
-} Triangle;
-
 uint32_t rgbtohex(Color color);
 
-Color interpolate(Color c1, Color c2, float t);
+Color interpolateColor(Vec3 baryCoords, Color colorA, Color colorB, Color colorC);
+
+Vec3 getBarycentricCoords(Vec2 vert1, Vec2 vert2, Vec2 vert3, Vec2 point);
 
 void clearscreen(Screen* screen, Color color);
 
@@ -52,6 +49,6 @@ void renderscreen(Screen* screen);
 
 void drawrectangle(Screen* screen, Vec2 startpos, Vec2 endpos, Color color);
 
-//void drawtriangle(Screen* screen, Vec2 a, Vec2 b, Vec2 c, Color color);
+void drawtriangle(Screen* screen, Vec2 a, Vec2 b, Vec2 c, Color color, int flag);
 
 void drawcircle(Screen* screen, Vec2 startpos,uint32_t r, Color color);
