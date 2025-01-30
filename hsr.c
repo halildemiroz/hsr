@@ -40,14 +40,31 @@ float getdeterminant(Vec2 edgestart, Vec2 edgeend, Vec2 pixel){
 		return edgelen.x * pixeldist.y - edgelen.y * pixeldist.x;
 }
 
-Color interpolate(Color c1, Color c2, float t){
-	Color result;
-	
-	result.r = c1.r * (1-t) + c2.r * t;
-	result.g = c1.g * (1-t) + c2.g * t;
-	result.b = c1.b * (1-t) + c2.b * t;
+Vec3 getBarycentricCoords(Vec2 vert1, Vec2 vert2, Vec2 vert3, Vec2 point) {
+    Vec2 v0 = vec2sub(vert2, vert1);
+    Vec2 v1 = vec2sub(vert3, vert1);
+    Vec2 v2 = vec2sub(point, vert1);
 
-	return result;
+    float d00 = v0.x * v0.x + v0.y * v0.y;
+    float d01 = v0.x * v1.x + v0.y * v1.y;
+    float d11 = v1.x * v1.x + v1.y * v1.y;
+    float d20 = v2.x * v0.x + v2.y * v0.y;
+    float d21 = v2.x * v1.x + v2.y * v1.y;
+
+    float denom = d00 * d11 - d01 * d01;
+    float v = (d11 * d20 - d01 * d21) / denom;
+    float w = (d00 * d21 - d01 * d20) / denom;
+    float u = 1.0f - v - w;
+
+    return (Vec3){u, v, w};
+}
+
+Color interpolateColor(Vec3 baryCoords, Color colorA, Color colorB, Color colorC) {
+    return (Color){
+        .r = baryCoords.x * colorA.r + baryCoords.y * colorB.r + baryCoords.z * colorC.r,
+        .g = baryCoords.x * colorA.g + baryCoords.y * colorB.g + baryCoords.z * colorC.g,
+        .b = baryCoords.x * colorA.b + baryCoords.y * colorB.b + baryCoords.z * colorC.b
+    };
 }
 
 Screen* createscreen(uint32_t width, uint32_t height){
@@ -96,36 +113,43 @@ void drawrectangle(Screen* screen, Vec2 startpos, Vec2 endpos, Color color){
 	}
 }
 
-void drawtriangle(Screen* screen, Vec2 vert1, Vec2 vert2, Vec2 vert3, Color color){
-	float xvals[] = {vert1.x, vert2.x, vert3.x};
+// Flag is used to determine if we want to triangle to be colorful or not
+void drawtriangle(Screen* screen, Vec2 vert1, Vec2 vert2, Vec2 vert3, Color color, int flag) {
+  	float xvals[] = {vert1.x, vert2.x, vert3.x};
 	float yvals[] = {vert1.y, vert2.y, vert3.y};
-	
-	float xmin = findmin(xvals, 3);
-	float ymin = findmin(yvals, 3);
 
-	float xmax = findmax(xvals, 3);
-	float ymax = findmax(yvals, 3);
+    float xmin = findmin(xvals, 3);
+    float ymin = findmin(yvals, 3);
 
-	for(int32_t y = ymin; y <= ymax; y++){
-		for(int32_t x = xmin; x <= xmax; x++){
-			Vec2 point = (Vec2){.x = x, .y = y};
-			
-			float d1 = getdeterminant(vert2, vert3, point); 
-			float d2 = getdeterminant(vert3, vert1, point);
-			float d3 = getdeterminant(vert1, vert2, point);
+    float xmax = findmax(xvals, 3);
+    float ymax = findmax(yvals, 3);
 
-			if(d1 >= 0 && d2 >= 0 && d3 >= 0){
-				fillpixel(screen, x, y, color);
-			}
-		}
-	}
+    for(int32_t y = ymin; y <= ymax; y++){
+        for(int32_t x = xmin; x <= xmax; x++){
+            Vec2 point = (Vec2){.x = x, .y = y};
+
+           float d1 = getdeterminant(vert2, vert3, point); 
+		   float d2 = getdeterminant(vert3, vert1, point);
+		   float d3 = getdeterminant(vert1, vert2, point);
+
+            if(d1 >= 0 && d2 >= 0 && d3 >= 0){
+				if(flag){				
+                	Vec3 baryCoords = getBarycentricCoords(vert1, vert2, vert3, point);
+                	Color newcolor = interpolateColor(baryCoords, RED, GREEN, BLUE);
+					fillpixel(screen, x, y, newcolor);
+				}
+				else{
+					fillpixel(screen, x, y, color);
+				}
+            }
+        }
+    }
 }
 
 void drawcircle(Screen* screen, Vec2 startpos, uint32_t r, Color color){
 	// x2 + y2 = r2
-	// merkeze olan uzaklığı hesapla ve yarıçaptan fazlaysa o noktayı alma
 	uint32_t d;
-	// Center[0] = centerX Center[1] = centerY
+	// Center[0] = centerX, Center[1] = centerY
 	uint32_t center[] = {startpos.x + r, startpos.y + r};
 	for(uint32_t y = startpos.y; y <= center[1] + r; y++){
 		for(uint32_t x = startpos.x; x <= center[0] + r; x++){

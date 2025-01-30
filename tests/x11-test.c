@@ -70,8 +70,8 @@ int main() {
     drawtriangle(pixels, (Vec2){250,250}, (Vec2){100,250}, (Vec2){100,100}, RED);
     */
     
-    drawtriangle(pixels, (Vec2){0,100}, (Vec2){100,0}, (Vec2){100,100}, interpolate(RED, BLUE, 0.5));
-
+    drawtriangle(pixels, (Vec2){0,100}, (Vec2){100,0}, (Vec2){100,100},RED,1);
+    drawtriangle(pixels, (Vec2){0,100}, (Vec2){0,0}, (Vec2){100,0},RED,1);
     // ------------------------------
     xcb_generic_event_t* event;
     while((event = xcb_wait_for_event(conn))){
